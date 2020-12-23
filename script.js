@@ -14,8 +14,7 @@ function sendNumberValue(number) {
   } else {
     // If current display value is 0, replace it , if not add number
     const displayValue = calculatorDisplay.textContent;
-    calculatorDisplay.textContent =
-      displayValue === "0" ? number : displayValue + number;
+    calculatorDisplay.textContent = displayValue === "0" ? number : displayValue + number;
   }
 }
 
@@ -30,29 +29,30 @@ function addDecimal() {
 
 // Calculate first and second values depending on operator
 const calculate = {
-    '/': (firstNumber, secondNumber) => firstNumber / secondNumber,
+  "/": (firstNumber, secondNumber) => firstNumber / secondNumber,
 
-    '*': (firstNumber, secondNumber) => firstNumber * secondNumber,
+  "*": (firstNumber, secondNumber) => firstNumber * secondNumber,
 
-    '+': (firstNumber, secondNumber) => firstNumber + secondNumber,
+  "+": (firstNumber, secondNumber) => firstNumber + secondNumber,
 
-    '-': (firstNumber, secondNumber) => firstNumber - secondNumber,
+  "-": (firstNumber, secondNumber) => firstNumber - secondNumber,
 
-    '=': (firstNumber, secondNumber) => secondNumber,
+  "=": (firstNumber, secondNumber) => secondNumber,
 };
 
 function useOperator(operator) {
   const currentValue = Number(calculatorDisplay.textContent);
   // Prevent multiple operators
   if (operatorValue && awaitingNextValue) {
-      operatorValue = operator
-      return;
+    operatorValue = operator;
+    return;
   }
   // Assign firstValue if no value
   if (!firstValue) {
     firstValue = currentValue;
   } else {
     const calculation = calculate[operatorValue](firstValue, currentValue);
+    console.log('calculation', calculation);
     calculatorDisplay.textContent = calculation;
     firstValue = calculation;
   }
@@ -61,24 +61,24 @@ function useOperator(operator) {
   operatorValue = operator;
 }
 
-// Reset all values display
-function resetAll() {
-  let firstValue = 0;
-  let operatorValue = "";
-  let awaitingNextValue = false;
-  calculatorDisplay.textContent = "0";
-}
-
 // Add Event Listeners for numbers, operators, decimals
 inputBtns.forEach((inputBtn) => {
-    if (inputBtn.classList.length === 0) {
-      inputBtn.addEventListener("click", () => sendNumberValue(inputBtn.value));
-    } else if (inputBtn.classList.contains("operator")) {
-      inputBtn.addEventListener("click", () => useOperator(inputBtn.value));
-    } else if (inputBtn.classList.contains("decimal")) {
-      inputBtn.addEventListener("click", () => addDecimal());
-    }
-  });
+  if (inputBtn.classList.length === 0) {
+    inputBtn.addEventListener("click", () => sendNumberValue(inputBtn.value));
+  } else if (inputBtn.classList.contains("operator")) {
+    inputBtn.addEventListener("click", () => useOperator(inputBtn.value));
+  } else if (inputBtn.classList.contains("decimal")) {
+    inputBtn.addEventListener("click", () => addDecimal());
+  }
+});
+
+// Reset all values display
+function resetAll() {
+  firstValue = 0;
+  operatorValue = "";
+  awaitingNextValue = false;
+  calculatorDisplay.textContent = "0";
+}
 
 // Event Listener
 clearBtn.addEventListener("click", resetAll);
